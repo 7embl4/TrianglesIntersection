@@ -6,17 +6,8 @@
 
 std::vector<Triangle> triangles;
 
-void MakeRandomTriangle(float x, float y) {
-    Triangle triangle(x, y);
-
-    // Если точка треугольника за границей, то он будет "пустой"
-    if (triangle.getPointCount() == 0) {
-        return;
-    }
-
-    triangle.setFillColor(sf::Color::Cyan);
-    triangle.setOutlineColor(sf::Color::Black);
-    triangle.setOutlineThickness(2);
+void MakeRandomTriangle(int mouse_x, int mouse_y) {
+    Triangle triangle(mouse_x, mouse_y);
     triangles.push_back(triangle);
 }
 
@@ -24,7 +15,7 @@ int main() {
     sf::ContextSettings settings;
     settings.antialiasingLevel = 16;
     sf::RenderWindow main_window(
-        sf::VideoMode(WindowWidth, WindowHeight), 
+        sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT),
         "Triangles",
         sf::Style::Close,
         settings

@@ -2,8 +2,8 @@
 #include <SFML/Graphics.hpp>
 #include "Interface.h"
 
-static size_t WindowWidth = 1500;
-static size_t WindowHeight = 900;
+static size_t WINDOW_WIDTH = 1600;
+static size_t WINDOW_HEIGHT = 900;
 
 class Frame {
 private:

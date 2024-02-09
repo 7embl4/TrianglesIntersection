@@ -3,16 +3,13 @@
 #include <vector>
 #include "Figures.h"
 
-bool IsPointInZone(float, float);
-
 class Triangle : public sf::Shape {
 private:
-    sf::ConvexShape tr;
-    static const size_t MaxRadius;  // Radius for random triangle generating 
-    static const size_t MinRadius;
+    std::vector<sf::Vector2f> vertices;
+    static const size_t MAX_RADIUS;
+    static const size_t MIN_RADIUS;
 
 public:
-    Triangle() : tr(3) {}
     Triangle(int, int);
     Triangle(sf::Vector2f, sf::Vector2f, sf::Vector2f);  // For tests
 
@@ -20,6 +17,6 @@ public:
         return 3;
     }
     sf::Vector2f getPoint(size_t index) const {
-        return tr.getPoint(index);
+        return vertices[index];
     }
 };

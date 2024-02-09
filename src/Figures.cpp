@@ -1,60 +1,63 @@
 ﻿#include "Figures.h"
 #include "Interface.h"
+#include <iostream>
 
-const size_t Triangle::MaxRadius = 200;
-const size_t Triangle::MinRadius = 20;
+const size_t Triangle::MAX_RADIUS = 200;
+const size_t Triangle::MIN_RADIUS = 20;
 
-bool IsPointInZone(float x, float y) {
-	if (x < 0 || y < 0 || x > WindowWidth || y > WindowHeight) {
-		return false;
-	}
-	return true;
-}
+Triangle::Triangle(int mouse_x, int mouse_y) : vertices(3) {
+	// TODO: Не спавнить за границами
+	// Как вариант не спавнить треугольник вообще, если он слишком близко к границе
 
-Triangle::Triangle(int x0, int y0) : tr(3) {
-	// TODO:
-	// 1) Не спавнить растянутые треугольники
-	// 2) Не спавнить вырожденные треугольники (сделано)
-	// 3) Не справнить за границами (вроде сделано, но как будто иногда все равно выходит)
+	// Задаем радиус, в котором будем рандомить точки
 	size_t radius = std::min({ 
-		MaxRadius, 
-		WindowWidth - x0, 
-		(size_t)x0, 
-		WindowHeight - y0, 
-		(size_t)y0
+		rand() % (MAX_RADIUS - MIN_RADIUS) + MIN_RADIUS,
+		WINDOW_WIDTH - mouse_x,
+		(size_t)mouse_x,
+		WINDOW_HEIGHT - mouse_y,
+		(size_t)mouse_y
 	});
 
-	size_t r = rand() % radius + MinRadius;
-	float x1 = rand() % (2 * r + 1) + (x0 - r);
-	float y1 = rand() % (2 * r + 1) + (y0 - r);
-	float x2 = rand() % (2 * r + 1) + (x0 - r);
-	float y2 = rand() % (2 * r + 1) + (y0 - r);
-	
-	// Если вторая точка спавнится на одной линии или там же где первая
-	// Тогда перегенерируем пока точка не подойдет
-	while ((x1 == y1) || (x2 == y2) || (x1 - x0) / (x2 - x1) == (y1 - y0) / (y2 - y1)) {
-		x2 = rand() % (2 * r + 1) + (x0 - r);
-		y2 = rand() % (2 * r + 1) + (y0 - r);
-	}
+	// Рандомим две вершины треугольника
+	float x1 = rand() % (2 * radius) + (mouse_x - radius);
+	float y1 = rand() % (2 * radius) + (mouse_y - radius);
+	float x2 = rand() % (2 * radius) + (mouse_x - radius);
+	float y2 = rand() % (2 * radius) + (mouse_y - radius);
 
-	float x3 = 3 * x0 - x1 - x2;
-	float y3 = 3 * y0 - y1 - y2;
-	
-	// TODO: Здесь, если третья вершина уходит за границу, то треугольник создается "пустой"
-	// И не появляется на экране, поэтому надо сделать, чтобы всегда спавнился треугольник
-	// Возможно, поменять как-то начальный алгоритм спавна точек
-	if (IsPointInZone(x3, y3)) {
-		tr.setPoint(0, { x1, y1 });
-		tr.setPoint(1, { x2, y2 });
-		tr.setPoint(2, { x3, y3 });
+	// Если вершины на одной линии с центор масс, 
+	// То двигаем вторую вершину на рандомное (в радиусе) расстояние по оси абсцисс
+	// В ту сторону, где "больше места"
+	if ((x1 == x2) || (y1 == y2) || (mouse_x - x1) / (x2 - x1) == (mouse_x - y1) / (y2 - y1)) {
+		if (x2 - (mouse_x - radius) < mouse_x + radius - x2) {
+			x2 += rand() % static_cast<size_t>(x2 - (mouse_x - radius));
+		}
+		else {
+			x2 += rand() % static_cast<size_t>((mouse_x + radius) - x2);
+		}
 	}
+	
+	// Находим третью вершину с помощью формулы центра масс
+	float x3 = 3 * mouse_x - x1 - x2;
+	float y3 = 3 * mouse_y - y1 - y2;
+
+	// Сохраняем вершины
+	vertices[0] = { x1, y1 };
+	vertices[1] = { x2, y2 };
+	vertices[2] = { x3, y3 };
+
+	// Customize
+	this->setFillColor(sf::Color::Cyan);
+	this->setOutlineColor(sf::Color::Black);
+	this->setOutlineThickness(2);
 }
 
-Triangle::Triangle(sf::Vector2f v1, sf::Vector2f v2, sf::Vector2f v3) {
-	tr.setPoint(0, { v1.x, v1.y });
-	tr.setPoint(1, { v2.x, v2.y });
-	tr.setPoint(2, { v3.x, v3.y });
-	tr.setFillColor(sf::Color::Yellow);
-	tr.setOutlineColor(sf::Color::Black);
-	tr.setOutlineThickness(2);
+Triangle::Triangle(sf::Vector2f v1, sf::Vector2f v2, sf::Vector2f v3) : vertices(3) {
+	vertices[0] = { v1.x, v1.y };
+	vertices[1] = { v2.x, v2.y };
+	vertices[2] = { v3.x, v3.y };
+
+	// Customize
+	this->setFillColor(sf::Color::Yellow);
+	this->setOutlineColor(sf::Color::Black);
+	this->setOutlineThickness(2);
 }
