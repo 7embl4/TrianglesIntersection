@@ -20,3 +20,21 @@ public:
         return vertices[index];
     }
 };
+
+class Polygon : public sf::Shape {
+private:
+    std::vector<sf::Vector2f> vertices;
+    size_t point_count;
+
+public:
+    Polygon(const Triangle&);
+    Polygon(size_t, std::vector<sf::Vector2f>);
+
+    virtual size_t getPointCount() const {
+        return point_count;
+    }
+
+    sf::Vector2f getPoint(size_t index) const {
+        return vertices[index];
+    }
+};
