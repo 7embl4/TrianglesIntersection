@@ -61,3 +61,15 @@ Triangle::Triangle(sf::Vector2f v1, sf::Vector2f v2, sf::Vector2f v3) : vertices
 	this->setOutlineColor(sf::Color::Black);
 	this->setOutlineThickness(2);
 }
+
+Polygon::Polygon(const Triangle& tr) : vertices(3), point_count(3) {
+	for (size_t i = 0; i != 3; ++i) {
+		vertices[i] = tr.getPoint(i);
+	}
+}
+
+Polygon::Polygon(size_t count, std::vector<sf::Vector2f> vs) : vertices(count), point_count(count) {
+	for (size_t i = 0; count; i++) {
+		vertices[i] = { vs[i].x, vs[i].y };
+	}
+}
