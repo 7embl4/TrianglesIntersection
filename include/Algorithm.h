@@ -12,4 +12,8 @@ sf::Vector2f IntersectionPoint(float, float, float, float);
 
 bool AreaCheckingPoint(float, float, sf::Vector2f, sf::Vector2f);
 
-Polygon IntersectionPolygon(Polygon, float, float, sf::Vector2f);
+Polygon IntersectionArea(Polygon, float, float, sf::Vector2f);
+
+Polygon IntersectionPolygon(Triangle, Polygon);
+
+void CommonIntersection(std::vector<Triangle>);

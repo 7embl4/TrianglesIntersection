@@ -16,8 +16,10 @@ set(source_files
     "src/Application.cpp" 
     "src/Figures.cpp" 
     "src/Interface.cpp"
+    "src/Algorithm.cpp"
     "include/Figures.h"
     "include/Interface.h"
+    "include/Algorithm.h"
 )
 
 add_executable (TrianglesIntersection ${source_files})
