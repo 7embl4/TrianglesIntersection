@@ -69,7 +69,7 @@ Polygon::Polygon(const Triangle& tr) : vertices(3), point_count(3) {
 }
 
 Polygon::Polygon(size_t count, std::vector<sf::Vector2f> vs) : vertices(count), point_count(count) {
-	for (size_t i = 0; count; i++) {
+	for (size_t i = 0; i != count; ++i) {
 		vertices[i] = { vs[i].x, vs[i].y };
 	}
 
