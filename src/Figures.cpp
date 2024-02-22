@@ -72,4 +72,9 @@ Polygon::Polygon(size_t count, std::vector<sf::Vector2f> vs) : vertices(count), 
 	for (size_t i = 0; count; i++) {
 		vertices[i] = { vs[i].x, vs[i].y };
 	}
+
+	// Customize
+	this->setFillColor(sf::Color::Red);
+	this->setOutlineColor(sf::Color::Black);
+	this->setOutlineThickness(5);
 }
