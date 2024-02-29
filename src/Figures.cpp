@@ -10,13 +10,7 @@ Triangle::Triangle(int mouse_x, int mouse_y) : vertices(3) {
 	// Как вариант не спавнить треугольник вообще, если он слишком близко к границе
 
 	// Задаем радиус, в котором будем рандомить точки
-	size_t radius = std::min({ 
-		rand() % (MAX_RADIUS - MIN_RADIUS) + MIN_RADIUS,
-		WINDOW_WIDTH - mouse_x,
-		(size_t)mouse_x,
-		WINDOW_HEIGHT - mouse_y,
-		(size_t)mouse_y
-	});
+	int radius = rand() % (250 - 30) + 30;
 
 	// Рандомим две вершины треугольника
 	float x1 = rand() % (2 * radius) + (mouse_x - radius);
@@ -29,10 +23,10 @@ Triangle::Triangle(int mouse_x, int mouse_y) : vertices(3) {
 	// В ту сторону, где "больше места"
 	if ((x1 == x2) || (y1 == y2) || (mouse_x - x1) / (x2 - x1) == (mouse_x - y1) / (y2 - y1)) {
 		if (x2 - (mouse_x - radius) < mouse_x + radius - x2) {
-			x2 += rand() % static_cast<size_t>(x2 - (mouse_x - radius));
+			x2 += rand() % static_cast<int>(x2 - (mouse_x - radius));
 		}
 		else {
-			x2 += rand() % static_cast<size_t>((mouse_x + radius) - x2);
+			x2 += rand() % static_cast<int>((mouse_x + radius) - x2);
 		}
 	}
 	

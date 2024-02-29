@@ -10,10 +10,12 @@ float bFind(sf::Vector2f, sf::Vector2f);
 
 sf::Vector2f IntersectionPoint(float, float, float, float);
 
-bool AreaCheckingPoint(float, float, sf::Vector2f, sf::Vector2f);
+bool PointChecking(float&, float&, const sf::Vector2f&, const sf::Vector2f&);
 
-Polygon IntersectionArea(Polygon, float, float, sf::Vector2f);
+bool AreaChecking(float&, float&, const sf::Vector2f&, const sf::Vector2f&);
 
-Polygon IntersectionPolygon(Triangle, Polygon);
+Polygon IntersectionArea(const Polygon&, float&, float&, const sf::Vector2f&);
 
-void CommonIntersection(std::vector<Triangle>);
+Polygon IntersectionPolygon(const Triangle&, const Polygon&);
+
+Polygon CommonIntersection(const std::vector<Triangle>&, size_t&);
