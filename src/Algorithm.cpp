@@ -2,11 +2,11 @@
 #include "Figures.h"
 #include <iostream>
 
-float kFind(sf::Vector2f v1, sf::Vector2f v2) {
+float kFind(const sf::Vector2f& v1, const sf::Vector2f& v2) {
     return (v1.y - v2.y) / (v1.x - v2.x);
 }
 
-float bFind(sf::Vector2f v1, sf::Vector2f v2) {
+float bFind(const sf::Vector2f& v1, const sf::Vector2f& v2) {
     return (v1.x * v2.y - v2.x * v1.y) / (v1.x - v2.x);
 }
 
@@ -18,21 +18,21 @@ sf::Vector2f IntersectionPoint(float k1, float b1, float k2, float b2) {
     return intersect_point;
 }
 
-bool PointChecking(float& k, float& b, const sf::Vector2f& v1, const sf::Vector2f& v2) {
+bool PointChecking(float k, float b, const sf::Vector2f& v1, const sf::Vector2f& v2) {
     if ((v1.y - k * v1.x - b) * (v2.y - k * v2.x - b) <= 0) {
         return true;
     }
     return false;
 }
 
-bool AreaChecking(float& k, float& b, const sf::Vector2f& v, const sf::Vector2f& v3) {
+bool AreaChecking(float k, float b, const sf::Vector2f& v, const sf::Vector2f& v3) {
     if ((v.y - k * v.x - b) * (v3.y - k * v3.x - b) >= 0) {
         return true;
     }
     return false;
 }
 
-Polygon IntersectionArea(const Polygon& polygon, float& k, float& b, const sf::Vector2f& v3) {
+Polygon IntersectionArea(const Polygon& polygon, float k, float b, const sf::Vector2f& v3) {
     int ind1 = -1, ind2 = -1;
     sf::Vector2f interpoint1, interpoint2, v1, v2;
     std::vector<sf::Vector2f> result_vertices;

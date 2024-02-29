@@ -9,7 +9,7 @@ private:
 
 public:
     Triangle(int, int);
-    Triangle(sf::Vector2f, sf::Vector2f, sf::Vector2f);  // For tests
+    Triangle(const sf::Vector2f&, const sf::Vector2f&, const sf::Vector2f&);  // For tests
 
     virtual size_t getPointCount() const {
         return 3;
@@ -26,7 +26,7 @@ private:
 
 public:
     Polygon(const Triangle&);
-    Polygon(size_t, std::vector<sf::Vector2f>);
+    Polygon(size_t, const std::vector<sf::Vector2f>&);
 
     virtual size_t getPointCount() const {
         return point_count;
