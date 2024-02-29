@@ -6,8 +6,6 @@
 class Triangle : public sf::Shape {
 private:
     std::vector<sf::Vector2f> vertices;
-    static const size_t MAX_RADIUS;
-    static const size_t MIN_RADIUS;
 
 public:
     Triangle(int, int);

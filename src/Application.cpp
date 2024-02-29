@@ -1,8 +1,10 @@
-﻿#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
+﻿//#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
 #include <ctime>
 #include <random>
 #include "Figures.h"
-#include "Interface.h"
+
+static const size_t WINDOW_WIDTH = 1600;
+static const size_t WINDOW_HEIGHT = 900;
 
 std::vector<Triangle> triangles;
 

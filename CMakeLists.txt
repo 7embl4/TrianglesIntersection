@@ -15,10 +15,8 @@ FetchContent_MakeAvailable(SFML)
 set(source_files
     "src/Application.cpp" 
     "src/Figures.cpp" 
-    "src/Interface.cpp"
     "src/Algorithm.cpp"
     "include/Figures.h"
-    "include/Interface.h"
     "include/Algorithm.h"
 )
 
