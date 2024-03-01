@@ -1,10 +1,15 @@
 ﻿#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
 #include <ctime>
 #include <random>
+#include <chrono>
 #include "Figures.h"
 
-static const int WINDOW_WIDTH = 1600;
-static const int WINDOW_HEIGHT = 900;
+// Window constants
+static const size_t WINDOW_WIDTH = 1600;
+static const size_t WINDOW_HEIGHT = 900;
+
+// Time constants
+static const auto SPAWN_DELAY = std::chrono::milliseconds(300);
 
 std::vector<Triangle> triangles;
 std::vector<Polygon> polygons;
@@ -32,6 +37,8 @@ int main() {
         settings
     );
 
+    auto last_spawn_time = std::chrono::system_clock::now();
+
     srand(time(0));
     while (main_window.isOpen()) {
         sf::Event event;
@@ -39,21 +46,27 @@ int main() {
             if (event.type == sf::Event::Closed)
                 main_window.close();
             if (event.type == sf::Event::MouseButtonReleased) {
-                MakeRandomPolygon(event.mouseButton.x + camera.getCenter().x - WINDOW_WIDTH / 2,
-                    event.mouseButton.y + camera.getCenter().y - WINDOW_HEIGHT / 2);
+                auto curr_time = std::chrono::system_clock::now();
+                if (curr_time - last_spawn_time > SPAWN_DELAY) {
+                    MakeRandomPolygon(event.mouseButton.x + camera.getCenter().x - WINDOW_WIDTH / 2,
+                        event.mouseButton.y + camera.getCenter().y - WINDOW_HEIGHT / 2);
+                    last_spawn_time = std::chrono::system_clock::now();
+                }
             }
             if (event.type == sf::Event::KeyPressed) {
-                if (event.key.code == sf::Keyboard::W) {
-                    camera.move(0, -40);
-                }
-                if (event.key.code == sf::Keyboard::S) {
-                    camera.move(0, 40);
-                }
-                if (event.key.code == sf::Keyboard::A) {
-                    camera.move(-40, 0);
-                }
-                if (event.key.code == sf::Keyboard::D) {
-                    camera.move(40, 0);
+                switch (event.key.code) {
+                    case (sf::Keyboard::W):
+                        camera.move(0, -40);
+                        break;
+                    case (sf::Keyboard::S):
+                        camera.move(0, 40);
+                        break;
+                    case (sf::Keyboard::A):
+                        camera.move(-40, 0);
+                        break;
+                    case (sf::Keyboard::D):
+                        camera.move(40, 0);
+                        break;
                 }
             }
         }
