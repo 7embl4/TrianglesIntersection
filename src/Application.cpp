@@ -3,14 +3,20 @@
 #include <random>
 #include "Figures.h"
 
-static const size_t WINDOW_WIDTH = 1600;
-static const size_t WINDOW_HEIGHT = 900;
+static const int WINDOW_WIDTH = 1600;
+static const int WINDOW_HEIGHT = 900;
 
 std::vector<Triangle> triangles;
+std::vector<Polygon> polygons;
 
 void MakeRandomTriangle(int mouse_x, int mouse_y) {
     Triangle triangle(mouse_x, mouse_y);
     triangles.push_back(triangle);
+}
+
+void MakeRandomPolygon(int mouse_x, int mouse_y) {
+    Polygon polygon(mouse_x, mouse_y);
+    polygons.push_back(polygon);
 }
 
 int main() {
@@ -33,7 +39,7 @@ int main() {
             if (event.type == sf::Event::Closed)
                 main_window.close();
             if (event.type == sf::Event::MouseButtonReleased) {
-                MakeRandomTriangle(event.mouseButton.x + camera.getCenter().x - WINDOW_WIDTH / 2,
+                MakeRandomPolygon(event.mouseButton.x + camera.getCenter().x - WINDOW_WIDTH / 2,
                     event.mouseButton.y + camera.getCenter().y - WINDOW_HEIGHT / 2);
             }
             if (event.type == sf::Event::KeyPressed) {
@@ -54,8 +60,8 @@ int main() {
         main_window.setView(camera);
         main_window.clear(sf::Color::White);
 
-        for (size_t i = 0; i != triangles.size(); ++i) {
-            main_window.draw(triangles[i]);
+        for (size_t i = 0; i != polygons.size(); ++i) {
+            main_window.draw(polygons[i]);
         }
 
         main_window.display();
