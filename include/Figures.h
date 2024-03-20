@@ -27,6 +27,7 @@ private:
 public:
     Polygon(const Triangle&);
     Polygon(size_t, const std::vector<sf::Vector2f>&);
+    Polygon() {}
 
     virtual size_t getPointCount() const {
         return point_count;

@@ -2,11 +2,13 @@
 #include <ctime>
 #include <random>
 #include "Figures.h"
+#include "Algorithm.h"
 
 static const size_t WINDOW_WIDTH = 1600;
 static const size_t WINDOW_HEIGHT = 900;
 
 std::vector<Triangle> triangles;
+
 
 void MakeRandomTriangle(int mouse_x, int mouse_y) {
     Triangle triangle(mouse_x, mouse_y);
@@ -14,6 +16,7 @@ void MakeRandomTriangle(int mouse_x, int mouse_y) {
 }
 
 int main() {
+    Polygon intersectionArea;
     sf::ContextSettings settings;
     sf::View camera;
     camera.reset(sf::FloatRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT));
@@ -26,6 +29,8 @@ int main() {
         settings
     );
 
+    kFind(sf::Vector2f(10, 10), sf::Vector2f(20, 10));
+
     srand(time(0));
     while (main_window.isOpen()) {
         sf::Event event;
@@ -35,6 +40,14 @@ int main() {
             if (event.type == sf::Event::MouseButtonReleased) {
                 MakeRandomTriangle(event.mouseButton.x + camera.getCenter().x - WINDOW_WIDTH / 2,
                     event.mouseButton.y + camera.getCenter().y - WINDOW_HEIGHT / 2);
+                if (triangles.size() == 1)
+                {
+                    intersectionArea = CommonIntersection(triangles, triangles.size());
+                }
+                else
+                {
+                    intersectionArea = IntersectionPolygon(triangles[triangles.size() - 1], intersectionArea);
+                }
             }
             if (event.type == sf::Event::KeyPressed) {
                 if (event.key.code == sf::Keyboard::W) {
@@ -56,6 +69,12 @@ int main() {
 
         for (size_t i = 0; i != triangles.size(); ++i) {
             main_window.draw(triangles[i]);
+        }
+
+        //intersectionArea = CommonIntersection(triangles, triangles.size());
+        if (triangles.size() > 1)
+        {
+            main_window.draw(intersectionArea);
         }
 
         main_window.display();

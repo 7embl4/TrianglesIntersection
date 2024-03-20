@@ -115,7 +115,7 @@ Polygon IntersectionPolygon(const Triangle& triangle, const Polygon& polygon) {
     return IntersectionArea(IntersectionArea(IntersectionArea(polygon, k1, b1, v3), k2, b2, v1), k3, b3, v2);
 }
 
-Polygon CommonIntersection(const std::vector<Triangle>& triangles, size_t& count) {
+Polygon CommonIntersection(const std::vector<Triangle>& triangles, size_t count) {
     Polygon polygon{ triangles[0] };
 
     for (size_t i = 1; i != count; ++i) {
