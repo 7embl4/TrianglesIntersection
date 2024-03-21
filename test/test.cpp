@@ -2,10 +2,11 @@
 #include <Windows.h>
 #include <gtest/gtest.h>
 #include "Figures.h"
+#include "Algorithm.h"
 
-int main() {
-	EXPECT_STRNE("hello", "world");
+TEST(a, b) {
+	Triangle tr;
 	EXPECT_EQ(7 * 6, 42);
-	Sleep(50);
-	return 0;
+	EXPECT_EQ(7 + 6, 13);
+	EXPECT_EQ(7 * 6, 41);
 }

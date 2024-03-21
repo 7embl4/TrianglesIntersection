@@ -1,15 +1,11 @@
-﻿cmake_minimum_required (VERSION 3.11)
+﻿cmake_minimum_required (VERSION 3.14)
 project ("TrianglesIntersection")
 set(CMAKE_CXX_STANDARD 17)
 
 include_directories(${CMAKE_SOURCE_DIR}/include)
 
 #including SFML
-include(FetchContent)
-FetchContent_Declare(SFML
-    GIT_REPOSITORY https://github.com/SFML/SFML.git
-    GIT_TAG 2.6.x)
-FetchContent_MakeAvailable(SFML)
+add_subdirectory(3rdparty/sfml)
 
 # set application sources
 set(source_files
@@ -24,20 +20,49 @@ set(source_files
 add_executable (TrianglesIntersection ${source_files})
 target_link_libraries(TrianglesIntersection PRIVATE sfml-graphics)
 
-# including gtest
-FetchContent_Declare(
-  googletest
-  GIT_REPOSITORY https://github.com/google/googletest.git
-  GIT_TAG        release-1.10.0
-)
-set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-FetchContent_MakeAvailable(googletest)
+# copy dll's
+if(WIN32)
+    if(BUILD_SHARED_LIBS)
+    add_custom_command(TARGET TrianglesIntersection POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            $<TARGET_FILE:sfml-graphics>
+            $<TARGET_FILE:sfml-window>
+            $<TARGET_FILE:sfml-system>
+            $<TARGET_FILE_DIR:TrianglesIntersection>)
+    endif()
+endif()
 
 # set tests sources
 set(test_files
-    "tests/main.cpp"
+    "test/test.cpp"
 )
 
-# add tests executable
-add_executable(tests ${test_files})
-target_link_libraries(tests PRIVATE sfml-graphics gtest gtest_main)
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    add_library(triangles PRIVATE 
+        "src/Figures.cpp" 
+        "src/Algorithm.cpp"
+        "include/Figures.h" 
+        "include/Algorithm.h"
+    )
+
+    add_subdirectory(3rdparty/googletest)
+    enable_testing()
+
+    add_executable(triangle_inter_tests ${test_files})
+    target_link_libraries(triangle_inter_tests PUBLIC triangles sfml-graphics GTest::gtest GTest::gtest_main)
+
+    if(WIN32)
+        if(BUILD_SHARED_LIBS)
+        add_custom_command(TARGET TrianglesIntersection POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                $<TARGET_FILE:gtest>
+                $<TARGET_FILE:gtest_main>
+                $<TARGET_FILE_DIR:TrianglesIntersection>)
+        endif()
+    endif()
+
+    add_test(
+        NAME triangle_inter_tests
+        COMMAND triangle_inter_tests.exe
+    )
+endif()
