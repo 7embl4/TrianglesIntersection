@@ -38,18 +38,23 @@ set(test_files
 )
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-    add_library(triangles PRIVATE 
+    add_library(figures-lib
         "src/Figures.cpp" 
         "src/Algorithm.cpp"
         "include/Figures.h" 
         "include/Algorithm.h"
     )
 
-    add_subdirectory(3rdparty/googletest)
+    add_subdirectory(3rdparty/gtest)
     enable_testing()
 
     add_executable(triangle_inter_tests ${test_files})
-    target_link_libraries(triangle_inter_tests PUBLIC triangles sfml-graphics GTest::gtest GTest::gtest_main)
+    target_link_libraries(triangle_inter_tests PUBLIC 
+        figures-lib 
+        sfml-graphics 
+        GTest::gtest 
+        GTest::gtest_main
+    )
 
     if(WIN32)
         if(BUILD_SHARED_LIBS)
