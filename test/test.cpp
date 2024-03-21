@@ -5,7 +5,7 @@
 #include "Algorithm.h"
 
 TEST(a, b) {
-	Triangle tr;
+	figures::Polygon polygon;
 	EXPECT_EQ(7 * 6, 42);
 	EXPECT_EQ(7 + 6, 13);
 	EXPECT_EQ(7 * 6, 41);

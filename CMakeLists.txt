@@ -4,21 +4,28 @@ set(CMAKE_CXX_STANDARD 17)
 
 include_directories(${CMAKE_SOURCE_DIR}/include)
 
-#including SFML
+# including SFML
 add_subdirectory(3rdparty/sfml)
 
-# set application sources
-set(source_files
-    "src/Application.cpp" 
+set(lib_sources
     "src/Figures.cpp" 
     "src/Algorithm.cpp"
-    "include/Figures.h"
+    "include/Figures.h" 
     "include/Algorithm.h"
 )
 
-# add application executable
-add_executable (TrianglesIntersection ${source_files})
-target_link_libraries(TrianglesIntersection PRIVATE sfml-graphics)
+# make library and link sfml to this
+add_library(figures-lib STATIC ${lib_sources})
+target_link_libraries(figures-lib PUBLIC sfml-graphics)
+
+# set application sources
+set(app_files
+    "src/Application.cpp"
+)
+
+# add application executable and link library
+add_executable (TrianglesIntersection ${app_files})
+target_link_libraries(TrianglesIntersection PUBLIC figures-lib)
 
 # copy dll's
 if(WIN32)
@@ -32,21 +39,14 @@ if(WIN32)
     endif()
 endif()
 
-# set tests sources
-set(test_files
-    "test/test.cpp"
-)
-
+# if use debug type of build, then build tests for lib as well
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-    add_library(figures-lib
-        "src/Figures.cpp" 
-        "src/Algorithm.cpp"
-        "include/Figures.h" 
-        "include/Algorithm.h"
-    )
-
     add_subdirectory(3rdparty/gtest)
     enable_testing()
+
+    set(test_files
+        "test/test.cpp"
+    )
 
     add_executable(triangle_inter_tests ${test_files})
     target_link_libraries(triangle_inter_tests PUBLIC 

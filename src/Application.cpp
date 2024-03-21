@@ -7,16 +7,15 @@
 static const size_t WINDOW_WIDTH = 1600;
 static const size_t WINDOW_HEIGHT = 900;
 
-std::vector<Triangle> triangles;
-
+std::vector<figures::Triangle> triangles;
 
 void MakeRandomTriangle(int mouse_x, int mouse_y) {
-    Triangle triangle(mouse_x, mouse_y);
+    figures::Triangle triangle(mouse_x, mouse_y);
     triangles.push_back(triangle);
 }
 
 int main() {
-    Polygon intersectionArea;
+    figures::Polygon intersectionArea;
     sf::ContextSettings settings;
     sf::View camera;
     camera.reset(sf::FloatRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT));
