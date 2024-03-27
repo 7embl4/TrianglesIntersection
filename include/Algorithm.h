@@ -14,8 +14,8 @@ bool PointChecking(float, float, const sf::Vector2f&, const sf::Vector2f&);
 
 bool AreaChecking(float, float, const sf::Vector2f&, const sf::Vector2f&);
 
-Polygon IntersectionArea(const Polygon&, float, float, const sf::Vector2f&);
+figures::Polygon IntersectionArea(const figures::Polygon&, float, float, const sf::Vector2f&);
 
-Polygon IntersectionPolygon(const Triangle&, const Polygon&);
+figures::Polygon IntersectionPolygon(const figures::Triangle&, const figures::Polygon&);
 
-Polygon CommonIntersection(const std::vector<Triangle>&, size_t);
+figures::Polygon CommonIntersection(const std::vector<figures::Triangle>&, size_t);

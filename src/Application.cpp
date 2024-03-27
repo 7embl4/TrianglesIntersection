@@ -11,16 +11,16 @@ static const size_t WINDOW_HEIGHT = 900;
 // Time constants
 static const auto SPAWN_DELAY = std::chrono::milliseconds(300);
 
-std::vector<Triangle> triangles;
-std::vector<Polygon> polygons;
+std::vector<figures::Triangle> triangles;
+std::vector<figures::Polygon> polygons;
 
 void MakeRandomTriangle(int mouse_x, int mouse_y) {
-    Triangle triangle(mouse_x, mouse_y);
+    figures::Triangle triangle(mouse_x, mouse_y);
     triangles.push_back(triangle);
 }
 
 void MakeRandomPolygon(int mouse_x, int mouse_y) {
-    Polygon polygon(mouse_x, mouse_y);
+    figures::Polygon polygon(mouse_x, mouse_y);
     polygons.push_back(polygon);
 }
 
