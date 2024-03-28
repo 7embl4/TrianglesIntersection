@@ -103,23 +103,29 @@ figures::Polygon IntersectionArea(const figures::Polygon& polygon, float k, floa
     return figures::Polygon(result_point_count, result_vertices);
 }
 
-figures::Polygon IntersectionPolygon(const figures::Triangle& triangle, const figures::Polygon& polygon) {
-    sf::Vector2f v1 = triangle.getPoint(0);
-    sf::Vector2f v2 = triangle.getPoint(1);
-    sf::Vector2f v3 = triangle.getPoint(2);
+figures::Polygon IntersectionPolygon(const figures::Polygon& polygon, const figures::Polygon& inter_polygon) {
+    sf::Vector2f v1, v2, v3;
+    float k, b;
+    figures::Polygon resultPolygon = inter_polygon;
+    size_t point_count = polygon.getPointCount();
 
-    float k1 = kFind(v1, v2), b1 = bFind(v1, v2);
-    float k2 = kFind(v2, v3), b2 = bFind(v2, v3);
-    float k3 = kFind(v3, v1), b3 = bFind(v3, v1);
+    for (size_t i = 0; i != point_count; ++i) {
+        v1 = polygon.getPoint(i);
+        v2 = polygon.getPoint((i + 1) % point_count);
+        v3 = polygon.getPoint((i + 2) % point_count);
+        k = kFind(v1, v2);
+        b = bFind(v1, v2);
+        resultPolygon = IntersectionArea(polygon, k, b, v3);
+    }
 
-    return IntersectionArea(IntersectionArea(IntersectionArea(polygon, k1, b1, v3), k2, b2, v1), k3, b3, v2);
+    return resultPolygon;
 }
 
-figures::Polygon CommonIntersection(const std::vector<figures::Triangle>& triangles, size_t& count) {
-    figures::Polygon polygon{ triangles[0] };
+figures::Polygon CommonIntersection(const std::vector<figures::Polygon>& polygons, size_t count) {
+    figures::Polygon polygon = polygons[0];
 
     for (size_t i = 1; i != count; ++i) {
-        polygon = IntersectionPolygon(triangles[i], polygon);
+        polygon = IntersectionPolygon(polygons[i], polygon);
     }
 
     return polygon;
