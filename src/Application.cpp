@@ -28,7 +28,7 @@ int main() {
     settings.antialiasingLevel = 16;
     sf::RenderWindow main_window(
         sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT),
-        "Triangles",
+        "Polygons",
         sf::Style::Close,
         settings
     );
