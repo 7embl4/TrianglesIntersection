@@ -2,37 +2,41 @@
 #include "Figures.h"
 #include <iostream>
 
-float kFind(const sf::Vector2f& v1, const sf::Vector2f& v2) {
-    return (v1.y - v2.y) / (v1.x - v2.x);
+float aFind(const sf::Vector2f& v1, const sf::Vector2f& v2) {
+    return v1.y - v2.y;
 }
 
 float bFind(const sf::Vector2f& v1, const sf::Vector2f& v2) {
-    return (v1.x * v2.y - v2.x * v1.y) / (v1.x - v2.x);
+    return v2.x - v1.x;
 }
 
-sf::Vector2f IntersectionPoint(float k1, float b1, float k2, float b2) {
-    float intersectX = -(b1 - b2) / (k1 - k2);
-    float intersectY = k1 * intersectX + b1;
+float cFind(const sf::Vector2f& v1, const sf::Vector2f& v2) {
+    return v1.x * v2.y - v2.x * v1.y;
+}
+
+sf::Vector2f IntersectionPoint(float a1, float b1, float c1, float a2, float b2, float c2) {
+    float intersectX = c1 * (b1 - b2) / (a1 * b2 - a2 * b1);
+    float intersectY = c1 * (a2 - a1) / (a1 * b2 - a2 * b1);
     sf::Vector2f intersect_point = { intersectX, intersectY };
 
     return intersect_point;
 }
 
-bool PointChecking(float k, float b, const sf::Vector2f& v1, const sf::Vector2f& v2) {
-    if ((v1.y - k * v1.x - b) * (v2.y - k * v2.x - b) <= 0) {
+bool PointChecking(float a, float b, float c, const sf::Vector2f& v1, const sf::Vector2f& v2) {
+    if ((a * v1.x + b * v1.y + c) * (a * v2.x + b * v2.y + c) <= 0) {
         return true;
     }
     return false;
 }
 
-bool AreaChecking(float k, float b, const sf::Vector2f& v, const sf::Vector2f& v3) {
-    if ((v.y - k * v.x - b) * (v3.y - k * v3.x - b) >= 0) {
+bool AreaChecking(float a, float b, float c, const sf::Vector2f& v, const sf::Vector2f& v3) {
+    if ((a * v.x + b * v.y + c) * (a * v3.x + b * v3.y + c) >= 0) {
         return true;
     }
     return false;
 }
 
-figures::Polygon IntersectionArea(const figures::Polygon& polygon, float k, float b, const sf::Vector2f& v3) {
+figures::Polygon IntersectionArea(const figures::Polygon& polygon, float a, float b, float c, const sf::Vector2f& v3) {
     int ind1 = -1, ind2 = -1;
     sf::Vector2f interpoint1, interpoint2, v1, v2;
     std::vector<sf::Vector2f> result_vertices;
@@ -42,20 +46,20 @@ figures::Polygon IntersectionArea(const figures::Polygon& polygon, float k, floa
     for (size_t i = 0; i != point_count; ++i) {
         v1 = polygon.getPoint(i);
         v2 = polygon.getPoint((i + 1) % point_count);
-        if (PointChecking(k, b, v1, v2)) {
+        if (PointChecking(a, b, c, v1, v2)) {
             if (ind1 == -1) {
                 ind1 = i;
-                interpoint1 = IntersectionPoint(k, b, kFind(v1, v2), bFind(v1, v2));
+                interpoint1 = IntersectionPoint(a, b, c, aFind(v1, v2), bFind(v1, v2), cFind(v1, v2));
             }
             else {
                 ind2 = i;
-                interpoint2 = IntersectionPoint(k, b, kFind(v1, v2), bFind(v1, v2));
+                interpoint2 = IntersectionPoint(a, b, c, aFind(v1, v2), bFind(v1, v2), cFind(v1, v2));
                 break;
             }
         }
     }
 
-    if ((ind1 == -1) && (AreaChecking(k, b, v1, v3))) {
+    if ((ind1 == -1) && (AreaChecking(a, b, c, v1, v3))) {
         result_point_count = point_count;
         for (size_t i = 0; i != result_point_count; ++i) result_vertices.push_back(polygon.getPoint(i));
     }
@@ -63,7 +67,7 @@ figures::Polygon IntersectionArea(const figures::Polygon& polygon, float k, floa
     // НЕ ВСЕ СЛУЧАИ ОБРАБОТАНЫ, когда точка пересечения совпадает с вершиной????? 
     else if ((ind2 != -1) && (ind1 != -1)) {
         if (interpoint1 == interpoint2) {
-            if (AreaChecking(k, b, interpoint1, v3)) {
+            if (AreaChecking(a, b, c, interpoint1, v3)) {
                 result_point_count = point_count;
                 for (size_t i = 0; i != result_point_count; ++i) result_vertices.push_back(polygon.getPoint(i));
             }
@@ -72,7 +76,7 @@ figures::Polygon IntersectionArea(const figures::Polygon& polygon, float k, floa
                 result_vertices.push_back(interpoint1);
             }
         }
-        else if (AreaChecking(k, b, polygon.getPoint(ind2), v3)) {
+        else if (AreaChecking(a, b, c, polygon.getPoint(ind2), v3)) {
             result_vertices.push_back(interpoint1);
             for (size_t i = ind1 + 1; i != ind2 + 1; ++i) result_vertices.push_back(polygon.getPoint(i));
             result_vertices.push_back(interpoint2);
@@ -91,7 +95,7 @@ figures::Polygon IntersectionArea(const figures::Polygon& polygon, float k, floa
 
 figures::Polygon IntersectionPolygon(const figures::Polygon& polygon, const figures::Polygon& inter_polygon) {
     sf::Vector2f v1, v2, v3;
-    float k, b;
+    float a, b, c;
     figures::Polygon resultPolygon = inter_polygon;
     size_t point_count = polygon.getPointCount();
 
@@ -99,9 +103,10 @@ figures::Polygon IntersectionPolygon(const figures::Polygon& polygon, const figu
         v1 = polygon.getPoint(i);
         v2 = polygon.getPoint((i + 1) % point_count);
         v3 = polygon.getPoint((i + 2) % point_count);
-        k = kFind(v1, v2);
+        a = aFind(v1, v2);
         b = bFind(v1, v2);
-        resultPolygon = IntersectionArea(resultPolygon, k, b, v3);
+        c = cFind(v1, v2);
+        resultPolygon = IntersectionArea(resultPolygon, a, b, c, v3);
     }
 
     return resultPolygon;
