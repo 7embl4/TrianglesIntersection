@@ -115,7 +115,7 @@ figures::Polygon IntersectionPolygon(const figures::Polygon& polygon, const figu
         v3 = polygon.getPoint((i + 2) % point_count);
         k = kFind(v1, v2);
         b = bFind(v1, v2);
-        resultPolygon = IntersectionArea(polygon, k, b, v3);
+        resultPolygon = IntersectionArea(resultPolygon, k, b, v3);
     }
 
     return resultPolygon;
