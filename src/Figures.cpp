@@ -132,9 +132,9 @@ namespace figures {
 		}
 
 		// Customize
-		this->setFillColor(sf::Color::Red);
+		this->setFillColor(sf::Color::Blue);
 		this->setOutlineColor(sf::Color::Black);
-		this->setOutlineThickness(5);
+		this->setOutlineThickness(2);
 	}
 
 	Polygon::Polygon(size_t count, const std::vector<sf::Vector2f>& vs) : vertices(count), point_count(count) {
@@ -143,8 +143,20 @@ namespace figures {
 		}
 
 		// Customize
+		this->setFillColor(sf::Color::Blue);
+		this->setOutlineColor(sf::Color::Black);
+		this->setOutlineThickness(2);
+	}
+
+	IntersectionArea::IntersectionArea(const Polygon& polygon) {
+		this->vertices.reserve(polygon.getPointCount());
+		for (size_t i = 0; i != polygon.getPointCount(); ++i) {
+			this->vertices[i] = polygon.getPoint(i);
+		}
+
+		// Customize
 		this->setFillColor(sf::Color::Red);
 		this->setOutlineColor(sf::Color::Black);
-		this->setOutlineThickness(5);
+		this->setOutlineThickness(3);
 	}
 }
