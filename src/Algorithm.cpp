@@ -99,7 +99,7 @@ figures::Polygon IntersectionArea(const figures::Polygon& polygon, float a, floa
                     if (AreaChecking(a, b, c, polygon.getPoint(0), v3)) result_vertices.push_back(polygon.getPoint(0));
                     else result_vertices.push_back(polygon.getPoint(1));
                 }
-                else if (AreaChecking(a, b, c, polygon.getPoint((ind2 + 2) % point_count), v3)) {
+                else if (AreaChecking(a, b, c, polygon.getPoint((ind2 + 1) % point_count), v3)) {
                     result_point_count = point_count;
                     for (size_t i = 0; i != result_point_count; ++i) result_vertices.push_back(polygon.getPoint(i));
                 }
