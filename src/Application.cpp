@@ -3,6 +3,7 @@
 #include <random>
 #include <chrono>
 #include "Figures.h"
+#include "Algorithm.h"
 
 // Window constants
 static const size_t WINDOW_WIDTH = 1600;
@@ -21,6 +22,7 @@ void MakeRandomPolygon(int mouse_x, int mouse_y) {
 int main() {
     sf::ContextSettings settings;
     sf::View camera;
+    figures::Polygon intersectionArea;
     camera.reset(sf::FloatRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT));
     camera.setCenter(sf::Vector2f(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2));
     settings.antialiasingLevel = 16;
@@ -44,6 +46,14 @@ int main() {
                 if (curr_time - last_spawn_time > SPAWN_DELAY) {
                     MakeRandomPolygon(event.mouseButton.x + camera.getCenter().x - WINDOW_WIDTH / 2,
                         event.mouseButton.y + camera.getCenter().y - WINDOW_HEIGHT / 2);
+                    if (polygons.size() == 1)
+                    {
+                        intersectionArea = CommonIntersection(polygons, polygons.size());
+                    }
+                    else if (polygons.size() > 1)
+                    {
+                        intersectionArea = IntersectionPolygon(polygons[polygons.size() - 1], intersectionArea);
+                    }
                     last_spawn_time = std::chrono::system_clock::now();
                 }
             }
@@ -70,6 +80,7 @@ int main() {
         for (size_t i = 0; i != polygons.size(); ++i) {
             main_window.draw(polygons[i]);
         }
+        main_window.draw(intersectionArea);
 
         main_window.display();
     }

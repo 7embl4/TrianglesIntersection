@@ -10,6 +10,7 @@ namespace figures {
         size_t point_count;
 
     public:
+        Polygon() {}
         Polygon(int, int);
         Polygon(size_t, const std::vector<sf::Vector2f>&);
 
