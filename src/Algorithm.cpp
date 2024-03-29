@@ -83,7 +83,6 @@ figures::Polygon IntersectionArea(const figures::Polygon& polygon, float a, floa
             result_vertices.push_back(interpoint1);
         }
 
-        // НЕ ВСЕ СЛУЧАИ ОБРАБОТАНЫ, когда точка пересечения совпадает с вершиной????? 
         else if ((ind2 != -1) && (ind1 != -1)) {
             if (interpoint1 == interpoint2) {
                 if (point_count == 2) {
