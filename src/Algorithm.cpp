@@ -15,8 +15,8 @@ float cFind(const sf::Vector2f& v1, const sf::Vector2f& v2) {
 }
 
 sf::Vector2f IntersectionPoint(float a1, float b1, float c1, float a2, float b2, float c2) {
-    float intersectX = c1 * (b1 - b2) / (a1 * b2 - a2 * b1);
-    float intersectY = c1 * (a2 - a1) / (a1 * b2 - a2 * b1);
+    float intersectX = (b1 * c2 - b2 * c1) / (a1 * b2 - a2 * b1);
+    float intersectY = (a2 * c1 - a1 * c2) / (a1 * b2 - a2 * b1);
     sf::Vector2f intersect_point = { intersectX, intersectY };
 
     return intersect_point;
