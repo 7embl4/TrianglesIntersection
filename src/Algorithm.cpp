@@ -46,7 +46,6 @@ figures::Polygon IntersectionArea(const figures::Polygon& polygon, float k, floa
             if (ind1 == -1) {
                 ind1 = i;
                 interpoint1 = IntersectionPoint(k, b, kFind(v1, v2), bFind(v1, v2));
-                //if ((v1.y - k * v1.x - b) * (v2.y - k * v2.x - b) == 0) break;
             }
             else {
                 ind2 = i;
@@ -61,20 +60,19 @@ figures::Polygon IntersectionArea(const figures::Polygon& polygon, float k, floa
         for (size_t i = 0; i != result_point_count; ++i) result_vertices.push_back(polygon.getPoint(i));
     }
 
-    else if ((ind2 == -1) && (ind1 != -1)) {
-        if (AreaChecking(k, b, interpoint1, v3)) {
-            result_point_count = point_count;
-            for (size_t i = 0; i != result_point_count; ++i) result_vertices.push_back(polygon.getPoint(i));
-        }
-        else {
-            result_point_count = 1;
-            result_vertices.push_back(interpoint1);
-        }
-    }
-
     // НЕ ВСЕ СЛУЧАИ ОБРАБОТАНЫ, когда точка пересечения совпадает с вершиной????? 
     else if ((ind2 != -1) && (ind1 != -1)) {
-        if (AreaChecking(k, b, polygon.getPoint(ind2), v3)) {
+        if (interpoint1 == interpoint2) {
+            if (AreaChecking(k, b, interpoint1, v3)) {
+                result_point_count = point_count;
+                for (size_t i = 0; i != result_point_count; ++i) result_vertices.push_back(polygon.getPoint(i));
+            }
+            else {
+                result_point_count = 1;
+                result_vertices.push_back(interpoint1);
+            }
+        }
+        else if (AreaChecking(k, b, polygon.getPoint(ind2), v3)) {
             result_vertices.push_back(interpoint1);
             for (size_t i = ind1 + 1; i != ind2 + 1; ++i) result_vertices.push_back(polygon.getPoint(i));
             result_vertices.push_back(interpoint2);
