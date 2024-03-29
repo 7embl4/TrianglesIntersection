@@ -17,9 +17,8 @@ float cFind(const sf::Vector2f& v1, const sf::Vector2f& v2) {
 sf::Vector2f IntersectionPoint(float a1, float b1, float c1, float a2, float b2, float c2) {
     float intersectX = (b1 * c2 - b2 * c1) / (a1 * b2 - a2 * b1);
     float intersectY = (a2 * c1 - a1 * c2) / (a1 * b2 - a2 * b1);
-    sf::Vector2f intersect_point = { intersectX, intersectY };
 
-    return intersect_point;
+    return sf::Vector2f(intersectX, intersectY);
 }
 
 bool PointChecking(float a, float b, float c, const sf::Vector2f& v1, const sf::Vector2f& v2) {
@@ -42,51 +41,99 @@ figures::Polygon IntersectionArea(const figures::Polygon& polygon, float a, floa
     std::vector<sf::Vector2f> result_vertices;
     size_t result_point_count = 0;
     size_t point_count = polygon.getPointCount();
+    size_t dop = 0;
 
-    for (size_t i = 0; i != point_count; ++i) {
-        v1 = polygon.getPoint(i);
-        v2 = polygon.getPoint((i + 1) % point_count);
-        if (PointChecking(a, b, c, v1, v2)) {
-            if (ind1 == -1) {
-                ind1 = i;
-                interpoint1 = IntersectionPoint(a, b, c, aFind(v1, v2), bFind(v1, v2), cFind(v1, v2));
-            }
-            else {
-                ind2 = i;
-                interpoint2 = IntersectionPoint(a, b, c, aFind(v1, v2), bFind(v1, v2), cFind(v1, v2));
-                break;
+    if ((point_count == 1) && (AreaChecking(a, b, c, polygon.getPoint(0), v3))) {
+        result_point_count = 1;
+        result_vertices.push_back(polygon.getPoint(0));
+    }
+
+    else if (point_count > 1) {
+        for (size_t i = 0; i != point_count; ++i) {
+            v1 = polygon.getPoint(i);
+            v2 = polygon.getPoint((i + 1) % point_count);
+            if (PointChecking(a, b, c, v1, v2)) {
+                if (ind1 == -1) {
+                    ind1 = i;
+                    if (a * bFind(v1, v2) - aFind(v1, v2) * b == 0) {
+                        interpoint1 = v1;
+                        interpoint2 = v2;
+                        break;
+                    }
+                    else interpoint1 = IntersectionPoint(a, b, c, aFind(v1, v2), bFind(v1, v2), cFind(v1, v2));
+                }
+                else {
+                    ind2 = i;
+                    if (a * bFind(v1, v2) - aFind(v1, v2) * b == 0) {
+                        interpoint2 = v2;
+                    }
+                    else interpoint2 = IntersectionPoint(a, b, c, aFind(v1, v2), bFind(v1, v2), cFind(v1, v2));
+                    break;
+                }
             }
         }
-    }
 
-    if ((ind1 == -1) && (AreaChecking(a, b, c, v1, v3))) {
-        result_point_count = point_count;
-        for (size_t i = 0; i != result_point_count; ++i) result_vertices.push_back(polygon.getPoint(i));
-    }
+        if ((ind1 == -1) && (AreaChecking(a, b, c, v1, v3))) {
+            result_point_count = point_count;
+            for (size_t i = 0; i != result_point_count; ++i) result_vertices.push_back(polygon.getPoint(i));
+        }
 
-    // НЕ ВСЕ СЛУЧАИ ОБРАБОТАНЫ, когда точка пересечения совпадает с вершиной????? 
-    else if ((ind2 != -1) && (ind1 != -1)) {
-        if (interpoint1 == interpoint2) {
-            if (AreaChecking(a, b, c, interpoint1, v3)) {
-                result_point_count = point_count;
-                for (size_t i = 0; i != result_point_count; ++i) result_vertices.push_back(polygon.getPoint(i));
+        if ((ind2 == -1) && (ind1 != -1)) {
+            result_point_count = 1;
+            result_vertices.push_back(interpoint1);
+        }
+
+        // НЕ ВСЕ СЛУЧАИ ОБРАБОТАНЫ, когда точка пересечения совпадает с вершиной????? 
+        else if ((ind2 != -1) && (ind1 != -1)) {
+            if (interpoint1 == interpoint2) {
+                if (point_count == 2) {
+                    result_point_count = 2;
+                    result_vertices.push_back(interpoint1);
+                    if (AreaChecking(a, b, c, polygon.getPoint(0), v3)) result_vertices.push_back(polygon.getPoint(0));
+                    else result_vertices.push_back(polygon.getPoint(1));
+                }
+                else if (AreaChecking(a, b, c, interpoint1, v3)) {
+                    result_point_count = point_count;
+                    for (size_t i = 0; i != result_point_count; ++i) result_vertices.push_back(polygon.getPoint(i));
+                }
+                else {
+                    result_point_count = 1;
+                    result_vertices.push_back(interpoint1);
+                }
             }
-            else {
-                result_point_count = 1;
+            else if ((interpoint1 == v1) && (interpoint2 == v2)) {
+                if (AreaChecking(a, b, c, polygon.getPoint((ind1 + 2) % point_count), v3)) {
+                    result_point_count = point_count;
+                    for (size_t i = 0; i != result_point_count; ++i) result_vertices.push_back(polygon.getPoint(i));
+                }
+                else {
+                    result_point_count = 2;
+                    result_vertices.push_back(interpoint1);
+                    result_vertices.push_back(interpoint2);
+                }
+            }
+            else if (AreaChecking(a, b, c, polygon.getPoint(ind2), v3)) {
                 result_vertices.push_back(interpoint1);
+                for (size_t i = ind1 + 1; i != ind2 + 1; ++i) { 
+                    if ((polygon.getPoint(i) == interpoint1) || (polygon.getPoint(i) == interpoint2)) {
+                        dop += 1;
+                    }
+                    result_vertices.push_back(polygon.getPoint(i));
+                }
+                result_vertices.push_back(interpoint2);
+                result_point_count = ind2 - ind1 + 2 - dop;
             }
-        }
-        else if (AreaChecking(a, b, c, polygon.getPoint(ind2), v3)) {
-            result_vertices.push_back(interpoint1);
-            for (size_t i = ind1 + 1; i != ind2 + 1; ++i) result_vertices.push_back(polygon.getPoint(i));
-            result_vertices.push_back(interpoint2);
-            result_point_count = ind2 - ind1 + 2;
-        }
-        else {
-            result_vertices.push_back(interpoint1);
-            result_vertices.push_back(interpoint2);
-            for (size_t i = ind2 + 1; i != point_count + ind1 + 1; ++i) result_vertices.push_back(polygon.getPoint(i % point_count));
-            result_point_count = point_count - (ind2 - ind1) + 2;
+            else {
+                result_vertices.push_back(interpoint1);
+                result_vertices.push_back(interpoint2);
+                for (size_t i = ind2 + 1; i != point_count + ind1 + 1; ++i) {
+                    if ((polygon.getPoint(i % point_count) == interpoint1) || (polygon.getPoint(i % point_count) == interpoint2)) {
+                        dop += 1;
+                    }
+                    result_vertices.push_back(polygon.getPoint(i % point_count));
+                }
+                result_point_count = point_count - (ind2 - ind1) + 2 - dop;
+            }
         }
     }
 
