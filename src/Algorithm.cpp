@@ -58,6 +58,7 @@ figures::Polygon IntersectionArea(const figures::Polygon& polygon, float a, floa
                     if (a * bFind(v1, v2) - aFind(v1, v2) * b == 0) {
                         interpoint1 = v1;
                         interpoint2 = v2;
+                        dop = 7;
                         break;
                     }
                     else interpoint1 = IntersectionPoint(a, b, c, aFind(v1, v2), bFind(v1, v2), cFind(v1, v2));
@@ -79,8 +80,15 @@ figures::Polygon IntersectionArea(const figures::Polygon& polygon, float a, floa
         }
 
         if ((ind2 == -1) && (ind1 != -1)) {
-            result_point_count = 1;
-            result_vertices.push_back(interpoint1);
+            if (dop == 7) {
+                result_point_count = 2;
+                result_vertices.push_back(interpoint1);
+                result_vertices.push_back(interpoint2);
+            }
+            else {
+                result_point_count = 1;
+                result_vertices.push_back(interpoint1);
+            }
         }
 
         else if ((ind2 != -1) && (ind1 != -1)) {
@@ -101,7 +109,7 @@ figures::Polygon IntersectionArea(const figures::Polygon& polygon, float a, floa
                 }
             }
             else if ((interpoint1 == v1) && (interpoint2 == v2)) {
-                if (AreaChecking(a, b, c, polygon.getPoint((ind1 + 2) % point_count), v3)) {
+                if (AreaChecking(a, b, c, polygon.getPoint((ind2 + 2) % point_count), v3)) {
                     result_point_count = point_count;
                     for (size_t i = 0; i != result_point_count; ++i) result_vertices.push_back(polygon.getPoint(i));
                 }
