@@ -3,6 +3,8 @@
 #include <vector>
 #include "Figures.h"
 
+float cross_product(const sf::Vector2f&, const sf::Vector2f&);
+
 namespace figures {
     class Polygon : public sf::Shape {
     private:

@@ -21,3 +21,5 @@ figures::Polygon IntersectionArea(const figures::Polygon&, float, float, float, 
 figures::Polygon IntersectionPolygon(const figures::Polygon&, const figures::Polygon&);
 
 figures::Polygon CommonIntersection(const std::vector<figures::Polygon>&, size_t);
+
+bool isConvexPolygon(const figures::Polygon&);

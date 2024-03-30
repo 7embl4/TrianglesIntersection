@@ -54,6 +54,13 @@ int main() {
                     {
                         intersectionArea = IntersectionPolygon(polygons[polygons.size() - 1], intersectionArea);
                     }
+                    
+                    if (intersectionArea.getPointCount() != 0 && isConvexPolygon(intersectionArea)) {
+                        intersectionArea.setFillColor(sf::Color::Green);
+                    }
+                    else {
+                        intersectionArea.setFillColor(sf::Color::Red);
+                    }
                     last_spawn_time = std::chrono::system_clock::now();
                 }
             }

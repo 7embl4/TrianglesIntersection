@@ -175,3 +175,31 @@ figures::Polygon CommonIntersection(const std::vector<figures::Polygon>& polygon
 
     return polygon;
 }
+
+
+int sgn(float n) {
+    if (n == 0) {
+        return 0;
+    }
+    else if (n < 0) {
+        return -1;
+    }
+    else {
+        return 1;
+    }
+}
+
+bool isConvexPolygon(const figures::Polygon& polygon) {
+    sf::Vector2f first_vec = polygon.getPoint(1) - polygon.getPoint(0);
+    sf::Vector2f second_vec = polygon.getPoint(2) - polygon.getPoint(1);
+
+    int sign = sgn(cross_product(first_vec, second_vec));
+    for (size_t i = 2; i != polygon.getPointCount() - 1; ++i) {
+        sf::Vector2f vec1 = polygon.getPoint(i) - polygon.getPoint(i - 1);
+        sf::Vector2f vec2 = polygon.getPoint(i + 1) - polygon.getPoint(i);
+        if (sgn(cross_product(vec1, vec2)) != sign) {
+            return false;
+        }
+    }
+    return true;
+}
