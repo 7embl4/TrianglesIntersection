@@ -38,7 +38,6 @@ TEST(CommonIntersectionTest2, hexagon) {
     }
 }
 
-
 TEST(CommonIntersectionTest3, empty) {
     //create polygons
     figures::Polygon polygon1(4, { sf::Vector2f(-2, 0), sf::Vector2f(-2, 2), sf::Vector2f(0, 2), sf::Vector2f(0, 0) });
@@ -123,9 +122,8 @@ TEST(CommonIntersectionTest7, intersection_9_vertices) {
 
     //output of coordinates
     int i = 0;
-    std::vector<int> uniqueArray;
-    int i = 0;
     for (i; i < result.getPointCount(); i++) {
         std::cout << result.getPoint(i).x << "  " << result.getPoint(i).y << "\n";
     }
+
 }
