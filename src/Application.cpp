@@ -78,7 +78,14 @@ int main() {
                     case (sf::Keyboard::D):
                         camera.move(40, 0);
                         break;
-                }
+                    case (sf::Keyboard::Space):
+                        if (!polygons.empty()) {
+                            polygons.clear();
+                            intersectionArea.setFillColor(sf::Color::Transparent);
+                            intersectionArea.setOutlineColor(sf::Color::Transparent);
+                        }
+                        break;
+                }   
             }
         }
         main_window.setView(camera);

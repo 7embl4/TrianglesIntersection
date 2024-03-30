@@ -71,7 +71,6 @@ namespace figures {
 
 		// Find convex hull of these points using Graham algorithm
 		vertices = convex_hull(points);
-		point_count = vertices.size();
 
 		// Сustomize
 		this->setFillColor(sf::Color::Cyan);
@@ -79,7 +78,7 @@ namespace figures {
 		this->setOutlineThickness(2);
 	}
 
-	Polygon::Polygon(size_t count, const std::vector<sf::Vector2f>& vs) : vertices(count), point_count(count) {
+	Polygon::Polygon(size_t count, const std::vector<sf::Vector2f>& vs) : vertices(count) {
 		for (size_t i = 0; i != count; ++i) {
 			vertices[i] = { vs[i].x, vs[i].y };
 		}
@@ -88,17 +87,5 @@ namespace figures {
 		this->setFillColor(sf::Color::Blue);
 		this->setOutlineColor(sf::Color::Black);
 		this->setOutlineThickness(2);
-	}
-
-	IntersectionArea::IntersectionArea(const Polygon& polygon) {
-		this->vertices.reserve(polygon.getPointCount());
-		for (size_t i = 0; i != polygon.getPointCount(); ++i) {
-			this->vertices[i] = polygon.getPoint(i);
-		}
-
-		// Customize
-		this->setFillColor(sf::Color::Red);
-		this->setOutlineColor(sf::Color::Black);
-		this->setOutlineThickness(3);
 	}
 }
