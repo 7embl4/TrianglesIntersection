@@ -28,8 +28,6 @@ int main() {
         settings
     );
 
-    kFind(sf::Vector2f(10, 10), sf::Vector2f(20, 10));
-
     srand(time(0));
     while (main_window.isOpen()) {
         sf::Event event;

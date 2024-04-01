@@ -4,17 +4,19 @@
 #include "Figures.h"
 #include "Algorithm.h"
 
-float kFind(const sf::Vector2f&, const sf::Vector2f&);
+float aFind(const sf::Vector2f&, const sf::Vector2f&);
 
 float bFind(const sf::Vector2f&, const sf::Vector2f&);
 
-sf::Vector2f IntersectionPoint(float, float, float, float);
+float cFind(const sf::Vector2f&, const sf::Vector2f&);
 
-bool PointChecking(float, float, const sf::Vector2f&, const sf::Vector2f&);
+sf::Vector2f IntersectionPoint(float, float, float, float, float, float);
 
-bool AreaChecking(float, float, const sf::Vector2f&, const sf::Vector2f&);
+bool PointChecking(float, float, float, const sf::Vector2f&, const sf::Vector2f&);
 
-figures::Polygon IntersectionArea(const figures::Polygon&, float, float, const sf::Vector2f&);
+bool AreaChecking(float, float, float, const sf::Vector2f&, const sf::Vector2f&);
+
+figures::Polygon IntersectionArea(const figures::Polygon&, float, float, float, const sf::Vector2f&);
 
 figures::Polygon IntersectionPolygon(const figures::Triangle&, const figures::Polygon&);
 
